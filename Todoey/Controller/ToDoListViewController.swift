@@ -8,7 +8,10 @@
 import UIKit
 
 class ToDoListViewController: UITableViewController {
-    override func viewDidLoad() { super.viewDidLoad() }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        ToDoDataSource.configure(storageType: StorageTypeEnum.CORE_DATA)
+    }
 
     // MARK: - TableView Datasource Methods
 

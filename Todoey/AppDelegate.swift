@@ -5,6 +5,7 @@
 //  Created by Kurnia Adi Nugroho on 26/08/25.
 //
 
+import CoreData
 import UIKit
 
 @main
@@ -55,4 +56,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // discarded scenes, as
         // they will not return.
     }
+
+    // MARK: - Core Data stack
+
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "DataModel")
+        container.loadPersistentStores(completionHandler: { _, error in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
 }
