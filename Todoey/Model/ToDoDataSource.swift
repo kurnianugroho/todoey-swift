@@ -81,6 +81,14 @@ class ToDoDataSource {
         }
     }
 
+    func filter(contains keyword: String) {
+        if storageType == StorageTypeEnum.PLIST {
+            getListFromPList(contains: keyword)
+        } else if storageType == StorageTypeEnum.CORE_DATA {
+            getListFromCoreData(contains: keyword)
+        }
+    }
+
     // MARK: - PLIST functions
 
     private func fileURL() -> URL? {
@@ -98,12 +106,18 @@ class ToDoDataSource {
         } catch { print("❌ Failed to save: \(error.localizedDescription)") }
     }
 
-    private func getListFromPList() {
+    private func getListFromPList(contains keyword: String = "") {
         guard let filePath = fileURL() else { return }
         let decoder = PropertyListDecoder()
         do {
             let data = try Data(contentsOf: filePath)
             toDoList = try decoder.decode([ToDoItem].self, from: data)
+
+            if !keyword.isEmpty {
+                toDoList.removeAll(where: { item in
+                    !item.title.lowercased().contains(keyword.lowercased())
+                })
+            }
         } catch {
             print(
                 "⚠️ No saved data or failed to decode: \(error.localizedDescription)",
@@ -161,10 +175,21 @@ class ToDoDataSource {
         }
     }
 
-    private func getListFromCoreData() {
+    private func getListFromCoreData(contains keyword: String = "") {
         let context = (UIApplication.shared.delegate as! AppDelegate)
             .persistentContainer.viewContext
         let request: NSFetchRequest<ToDoItemCore> = ToDoItemCore.fetchRequest()
+
+        if !keyword.isEmpty {
+            request.predicate = NSPredicate(
+                format: "title CONTAINS[cd] %@",
+                keyword,
+            )
+            request.sortDescriptors = [NSSortDescriptor(
+                key: "title",
+                ascending: true,
+            )]
+        }
 
         do {
             let result = try context.fetch(request)

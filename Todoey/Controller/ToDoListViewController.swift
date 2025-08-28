@@ -8,8 +8,13 @@
 import UIKit
 
 class ToDoListViewController: UITableViewController {
+    @IBOutlet var searchBar: UISearchBar!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        searchBar.delegate = self
+
         ToDoDataSource.configure(storageType: StorageTypeEnum.CORE_DATA)
     }
 
@@ -91,5 +96,30 @@ class ToDoListViewController: UITableViewController {
         }
 
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension ToDoListViewController: UISearchBarDelegate {
+    // MARK: - Search Bar
+
+    private func getUpdatedList(_ keyword: String?) {
+        if let keyword {
+            ToDoDataSource.shared.filter(contains: keyword)
+            DispatchQueue.main.async { self.tableView.reloadData() }
+        }
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        getUpdatedList(searchBar.text)
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        getUpdatedList(searchText)
+
+        if searchText.isEmpty {
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
     }
 }
