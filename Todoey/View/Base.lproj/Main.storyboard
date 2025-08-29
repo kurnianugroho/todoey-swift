@@ -9,9 +9,47 @@
     </dependencies>
     <scenes>
         <!--Todoey-->
+        <scene sceneID="n15-0F-AhA">
+            <objects>
+                <tableViewController id="jeT-fM-cZJ" customClass="CategoryListViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="ah7-k9-M3M">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="690"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CategoryCell" id="ZqX-gJ-jlf">
+                                <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZqX-gJ-jlf" id="q7O-Ir-orZ">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="jeT-fM-cZJ" id="e1e-Uy-m3d"/>
+                            <outlet property="delegate" destination="jeT-fM-cZJ" id="h4Y-FG-hDW"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Todoey" id="Qo3-HZ-DMx">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="WV5-su-EcH">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="jeT-fM-cZJ" id="meZ-5x-TZu"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="7Da-t3-0xK" kind="show" identifier="goToItems" id="rB8-22-3m5"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FTV-lS-Yaw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1476" y="20"/>
+        </scene>
+        <!--Todoey-->
         <scene sceneID="VtM-pJ-kDx">
             <objects>
-                <tableViewController id="7Da-t3-0xK" customClass="ToDoListViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="7Da-t3-0xK" customClass="ItemListViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="w7E-1M-aD9">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="690"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -53,7 +91,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ks4-Wq-kb1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1707.6335877862596" y="19.718309859154932"/>
+            <point key="canvasLocation" x="2198" y="20"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gsS-wp-Wpc">
@@ -73,7 +111,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="7Da-t3-0xK" kind="relationship" relationship="rootViewController" id="JVV-KC-6co"/>
+                        <segue destination="jeT-fM-cZJ" kind="relationship" relationship="rootViewController" id="Cim-Ba-CVe"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q8E-Jc-ava" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

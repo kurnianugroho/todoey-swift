@@ -1,5 +1,5 @@
 //
-//  ToDoListViewController.swift
+//  ItemListViewController.swift
 //  Todoey
 //
 //  Created by Kurnia Adi Nugroho on 26/08/25.
@@ -7,15 +7,21 @@
 
 import UIKit
 
-class ToDoListViewController: UITableViewController {
+class ItemListViewController: UITableViewController {
     @IBOutlet var searchBar: UISearchBar!
+
+    var itemDataSource: ItemDataSource?
+
+    var parentCategory: Category? {
+        didSet {
+            itemDataSource = ItemDataSource(parentCategory: parentCategory!)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         searchBar.delegate = self
-
-        ToDoDataSource.configure(storageType: StorageTypeEnum.CORE_DATA)
     }
 
     // MARK: - TableView Datasource Methods
@@ -24,7 +30,7 @@ class ToDoListViewController: UITableViewController {
         _: UITableView,
         numberOfRowsInSection _: Int,
     ) -> Int {
-        ToDoDataSource.shared.count()
+        itemDataSource!.count()
     }
 
     override func tableView(
@@ -37,7 +43,7 @@ class ToDoListViewController: UITableViewController {
             withIdentifier: "ToDoItemCell",
             for: indexPath,
         )
-        let item = ToDoDataSource.shared.item(at: indexPath.row)
+        let item = itemDataSource!.item(at: indexPath.row)
 
         cell.textLabel?.text = item.title
         cell.accessoryType = item.isDone ? .checkmark : .none
@@ -49,11 +55,12 @@ class ToDoListViewController: UITableViewController {
         _: UITableView,
         didSelectRowAt indexPath: IndexPath,
     ) {
-        let initialItem = ToDoDataSource.shared.item(at: indexPath.row)
+        let initialItem = itemDataSource!.item(at: indexPath.row)
 
-        ToDoDataSource.shared.update(
+        itemDataSource!.update(
             at: indexPath.row,
-            to: initialItem.copyWith(isDone: !initialItem.isDone),
+            title: initialItem.title!,
+            isDone: !initialItem.isDone,
         )
 
         DispatchQueue.main.async {
@@ -76,11 +83,8 @@ class ToDoListViewController: UITableViewController {
             title: "Add Item",
             style: .default,
         ) { _ in
-            if let newItem = alert.textFields?.first?.text {
-                ToDoDataSource.shared.add(ToDoItem(
-                    title: newItem,
-                    isDone: false,
-                ))
+            if let newItemTitle = alert.textFields?.first?.text {
+                self.itemDataSource!.add(newItemTitle)
 
                 DispatchQueue.main.async { self.tableView.reloadData() }
             }
@@ -99,12 +103,12 @@ class ToDoListViewController: UITableViewController {
     }
 }
 
-extension ToDoListViewController: UISearchBarDelegate {
+extension ItemListViewController: UISearchBarDelegate {
     // MARK: - Search Bar
 
     private func getUpdatedList(_ keyword: String?) {
         if let keyword {
-            ToDoDataSource.shared.filter(contains: keyword)
+            itemDataSource!.filter(contains: keyword)
             DispatchQueue.main.async { self.tableView.reloadData() }
         }
     }

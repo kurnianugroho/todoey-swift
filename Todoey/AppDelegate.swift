@@ -21,9 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor.accent
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backButtonAppearance.normal
+            .titleTextAttributes = [.foregroundColor: UIColor.white]
 
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().tintColor = .white
 
         return true
     }
